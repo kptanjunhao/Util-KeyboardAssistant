@@ -13,7 +13,12 @@ An auto-adjust keyboard and your control likes some button position util.一个�
     import UIKit
 
     protocol KeyboardChangedDelegate: class {
-        ///键盘结束时的frame，弹起时的动画持续时间以及效果
+        /**
+         键盘frame变化时调用
+         - parameter frame          : 键盘变化后的frame.
+         - parameter animateDuration: 键盘变化动画的持续时间.
+         - parameter animateCurve   : 键盘变化动画的动画效果.
+         */
         func keyboardChanged(frame: CGRect, animateDuration: Double, animateCurve: UIViewAnimationOptions)
     }
 
