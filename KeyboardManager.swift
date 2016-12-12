@@ -42,10 +42,13 @@ class KeyboardManager{
     
     /**
      自动移动不被遮挡控件的初始化方式
+     
+     如果noShelterView为空则将要移动视图跟着键盘位移
+     
      - parameter toMoveView     : 将要被移动的视图.
      - parameter noShelterView  : 不会被键盘遮挡的视图.
      */
-    init(toMoveView: UIView, noShelterView: UIView!){
+    init(toMoveView: UIView, noShelterView: UIView? = nil){
         self.toMoveView = toMoveView
         self.toMoveViewOriginFrame = toMoveView.frame
         self.noShelterView = noShelterView
@@ -54,14 +57,14 @@ class KeyboardManager{
             (frame, animateDuration, animateCurve) in
             UIView.animate(withDuration: animateDuration, delay: 0, options: animateCurve, animations: {
                 //键盘在屏幕中的位置的判断
-                if screen.height - frame.origin.y <= 0{
+                if UIScreen.main.bounds.height - frame.origin.y <= 0{
                     //收起则还原控件位置
                     self.toMoveView!.top = self.toMoveViewOriginFrame!.origin.y
                 }else{//弹起则计算偏移，不被遮挡
                     ///控件在屏幕KeyWindow的位置
-                    let noShelterRectInWindow = self.noShelterView!.convert(self.noShelterView!.bounds, to: UIApplication.shared.keyWindow!)
+                    let noShelterRectInWindow = self.noShelterView?.convert(self.noShelterView!.bounds, to: UIApplication.shared.keyWindow!)
                     ///计算控件顶部与键盘顶部的差，加上控件的高度，得出偏移量
-                    let offsetY = noShelterRectInWindow.origin.y - frame.origin.y + self.noShelterView!.height
+                    let offsetY = (noShelterRectInWindow?.origin.y ?? UIScreen.main.bounds.height) - frame.origin.y + (self.noShelterView?.height ?? 0)
                     self.toMoveView!.top = self.toMoveView!.top - offsetY
                 }
             })
