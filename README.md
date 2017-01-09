@@ -34,10 +34,10 @@ An auto-adjust keyboard and your control likes some button position util.一个�
 
             ///代理返回键盘高度的初始化方式
             /**
-            func keyboardChanged(frame: CGRect, animateDuration: Double, animateCurve: UIViewAnimationOptions){
-               <#code#>
-            }
-            */
+             func keyboardChanged(frame: CGRect, animateDuration: Double, animateCurve: UIViewAnimationOptions){
+             <#code#>
+             }
+             */
             /// - parameter target     : KeyboardChangedDelegate
             init(_ target: KeyboardChangedDelegate?){
                 self.delegate = target
@@ -63,13 +63,13 @@ An auto-adjust keyboard and your control likes some button position util.一个�
                         //键盘在屏幕中的位置的判断
                         if UIScreen.main.bounds.height - frame.origin.y <= 0{
                             //收起则还原控件位置
-                            self.toMoveView!.top = self.toMoveViewOriginFrame!.origin.y
+                            self.toMoveView!.frame.origin.y = self.toMoveViewOriginFrame!.origin.y
                         }else{//弹起则计算偏移，不被遮挡
                             ///控件在屏幕KeyWindow的位置
                             let noShelterRectInWindow = self.noShelterView?.convert(self.noShelterView!.bounds, to: UIApplication.shared.keyWindow!)
                             ///计算控件顶部与键盘顶部的差，加上控件的高度，得出偏移量
-                            let offsetY = (noShelterRectInWindow?.origin.y ?? UIScreen.main.bounds.height) - frame.origin.y + (self.noShelterView?.height ?? 0)
-                            self.toMoveView!.top = self.toMoveView!.top - offsetY
+                            let offsetY = (noShelterRectInWindow?.origin.y ?? UIScreen.main.bounds.height) - frame.origin.y + (self.noShelterView?.frame.height ?? 0)
+                            self.toMoveView!.frame.origin.y = self.toMoveView!.frame.origin.y - offsetY
                         }
                     })
                 }
