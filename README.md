@@ -34,14 +34,14 @@ An auto-adjust keyboard and your control likes some button position util.一个�
 
             ///代理返回键盘高度的初始化方式
             /**
-             func keyboardChanged(frame: CGRect, animateDuration: Double, animateCurve: UIViewAnimationOptions){
-             <#code#>
-             }
-             */
+            func km_keyboardChanged(frame: CGRect, animateDuration: Double, animateCurve: UIViewAnimationOptions){
+               <#code#>
+            }
+            */
             /// - parameter target     : KeyboardChangedDelegate
             init(_ target: KeyboardChangedDelegate?){
                 self.delegate = target
-                NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardChanged(sender:)), name: .UIKeyboardWillChangeFrame, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.km_keyboardChanged(sender:)), name: .UIKeyboardWillChangeFrame, object: nil)
             }
 
             /**
@@ -56,20 +56,20 @@ An auto-adjust keyboard and your control likes some button position util.一个�
                 self.toMoveView = toMoveView
                 self.toMoveViewOriginFrame = toMoveView.frame
                 self.noShelterView = noShelterView
-                NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardChanged(sender:)), name: .UIKeyboardWillChangeFrame, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.km_keyboardChanged(sender:)), name: .UIKeyboardWillChangeFrame, object: nil)
                 noShelter = {
                     (frame, animateDuration, animateCurve) in
                     UIView.animate(withDuration: animateDuration, delay: 0, options: animateCurve, animations: {
                         //键盘在屏幕中的位置的判断
                         if UIScreen.main.bounds.height - frame.origin.y <= 0{
                             //收起则还原控件位置
-                            self.toMoveView!.frame.origin.y = self.toMoveViewOriginFrame!.origin.y
+                            self.toMoveView?.frame.origin.y = self.toMoveViewOriginFrame!.origin.y
                         }else{//弹起则计算偏移，不被遮挡
                             ///控件在屏幕KeyWindow的位置
                             let noShelterRectInWindow = self.noShelterView?.convert(self.noShelterView!.bounds, to: UIApplication.shared.keyWindow!)
                             ///计算控件顶部与键盘顶部的差，加上控件的高度，得出偏移量
-                            let offsetY = (noShelterRectInWindow?.origin.y ?? UIScreen.main.bounds.height) - frame.origin.y + (self.noShelterView?.frame.height ?? 0)
-                            self.toMoveView!.frame.origin.y = self.toMoveView!.frame.origin.y - offsetY
+                            let offsetY = (noShelterRectInWindow?.origin.y ?? UIScreen.main.bounds.height) - frame.origin.y + (self.noShelterView?.height ?? 0)
+                            self.toMoveView?.frame.origin.y = self.toMoveViewOriginFrame!.origin.y - offsetY
                         }
                     })
                 }
@@ -79,7 +79,7 @@ An auto-adjust keyboard and your control likes some button position util.一个�
                 NotificationCenter.default.removeObserver(self as Any, name: .UIKeyboardWillChangeFrame, object: nil)
             }
 
-            @objc func keyboardChanged(sender: Notification){
+            @objc func km_keyboardChanged(sender: Notification){
                 let info = sender.userInfo!
                 let frame = (info[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue ?? CGRect.zero
                 let duration = (info[UIKeyboardAnimationDurationUserInfoKey]! as AnyObject).doubleValue ?? 0.3
